@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Clubs & Communities | MIT Socials</title>
+<link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/dashboard.css">
+<style>
+.page{max-width:1200px;margin:auto;padding:2rem 1rem}.club-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.club-card{background:var(--bg-surface);border:1px solid var(--border-color);border-radius:16px;overflow:hidden}.club-banner{height:120px;width:100%;object-fit:cover;background:var(--bg-secondary)}
+.club-body{padding:1.1rem}.club-logo{width:58px;height:58px;border-radius:14px;object-fit:cover;margin-top:-40px;border:3px solid var(--bg-surface);background:var(--bg-secondary)}
+.club-meta{display:flex;gap:.5rem;flex-wrap:wrap;margin:.6rem 0}.pill{font-size:.75rem;padding:.3rem .55rem;border-radius:99px;background:var(--bg-secondary);color:var(--text-secondary)}
+.club-desc{color:var(--text-secondary);font-size:.9rem;min-height:48px}.actions{display:flex;gap:.6rem;margin-top:1rem}.modal{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:1rem;z-index:50}.modal.open{display:flex}.modal-box{background:var(--bg-surface);max-width:760px;width:100%;max-height:90vh;overflow:auto;border-radius:18px;padding:1.5rem}.post{padding:1rem 0;border-bottom:1px solid var(--border-color)}.post:last-child{border-bottom:0}.muted{color:var(--text-muted);font-size:.88rem}
+</style>
+</head>
+<body>
+<header class="navbar"><div class="nav-container">
+<a href="dashboard.html" class="brand-logo">🎓 MIT SOCIALS</a>
+<div style="display:flex;gap:12px;align-items:center"><a class="btn btn-secondary" href="dashboard.html">Dashboard</a><a class="btn btn-secondary logout-btn" href="#">Sign Out</a></div>
+</div></header>
+<main class="page">
+<h1>👥 Clubs & Communities</h1>
+<p class="muted">Discover campus clubs, join communities and read their latest announcements.</p>
+<div id="status" class="muted" style="margin:1.5rem 0">Loading clubs...</div>
+<div id="clubs" class="club-grid"></div>
+</main>
+<div id="modal" class="modal"><div class="modal-box"><div style="display:flex;justify-content:space-between;gap:1rem"><div id="detail"></div><button id="close" class="btn btn-secondary">Close</button></div></div></div>
+<script src="js/common.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',async()=>{
+ const session=await checkAuthSession(true);if(!session||!session.loggedIn)return;
+ const grid=document.getElementById('clubs'),status=document.getElementById('status'),modal=document.getElementById('modal'),detail=document.getElementById('detail');
+ async function load(){
+  try{const r=await fetch('api/clubs');const d=await r.json();if(!d.success)throw Error(d.message);
+   grid.innerHTML='';status.textContent=`${d.count} club${d.count===1?'':'s'} available`;
+   d.clubs.forEach(c=>{const card=document.createElement('article');card.className='club-card';
+    card.innerHTML=`<img class="club-banner" src="${c.bannerUrl||'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=900&q=80'}">
+    <div class="club-body"><img class="club-logo" src="${c.logoUrl||'https://ui-avatars.com/api/?name='+encodeURIComponent(c.name)}">
+    <h2 style="margin:.5rem 0 .25rem">${esc(c.name)} ${c.verified?'✓':''}</h2>
+    <div class="club-meta"><span class="pill">${esc(c.category)}</span><span class="pill">${c.memberCount} members</span><span class="pill">Lead: ${esc(c.leadName)}</span></div>
+    <p class="club-desc">${esc(c.description||'No description yet.')}</p>
+    <div class="actions"><button class="btn btn-primary join" data-id="${c.id}" data-joined="${c.joined}">${c.joined?'Leave Club':'Join Club'}</button><button class="btn btn-secondary view" data-id="${c.id}">View Club</button></div></div>`;
+    grid.appendChild(card);
+   });
+  }catch(e){status.textContent=e.message||'Could not load clubs.'}
+ }
+ grid.addEventListener('click',async e=>{
+  const join=e.target.closest('.join'),view=e.target.closest('.view');
+  if(join){const id=join.dataset.id, action=join.dataset.joined==='true'?'leave':'join';
+   const r=await fetch('api/clubs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({club_id:id,action})});
+   const d=await r.json();if(!d.success){alert(d.message);return}load();
+  }
+  if(view){const r=await fetch('api/clubs?id='+view.dataset.id);const d=await r.json();if(!d.success){alert(d.message);return}
+   const c=d.club;detail.innerHTML=`<img style="width:100%;max-height:220px;object-fit:cover;border-radius:12px" src="${c.bannerUrl||''}"><h2>${esc(c.name)}</h2><p>${esc(c.description||'')}</p><div class="club-meta"><span class="pill">${esc(c.category)}</span><span class="pill">${c.memberCount} members</span><span class="pill">Lead: ${esc(c.leadName)}</span></div><p>${esc(c.achievements||'')}</p><h3>Announcements</h3>${d.posts.length?d.posts.map(p=>`<div class="post"><strong>${esc(p.title)}</strong><div class="muted">${esc(p.authorName)} • ${new Date(p.createdAt).toLocaleString()}</div><p>${esc(p.content)}</p></div>`).join(''):'<p class="muted">No announcements yet.</p>'}`;
+   modal.classList.add('open');
+  }
+ });
+ document.getElementById('close').onclick=()=>modal.classList.remove('open');modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open')});
+ document.querySelectorAll('.logout-btn').forEach(b=>b.onclick=async e=>{e.preventDefault();await fetch('api/logout',{method:'POST'});location.href='login.html'});
+ load();
+});
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+</script>
+</body>
+</html>

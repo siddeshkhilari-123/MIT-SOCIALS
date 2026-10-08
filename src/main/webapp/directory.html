@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Directory | MIT Socials</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<style>
+.directory-wrap{max-width:1200px;margin:0 auto;padding:2rem 1rem}
+.directory-toolbar{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:.75rem;margin:1.5rem 0}
+.directory-toolbar input,.directory-toolbar select{width:100%;padding:.8rem 1rem;border:1px solid var(--border-color);border-radius:10px;background:var(--bg-surface);color:var(--text-primary)}
+.directory-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.student-card{background:var(--bg-surface);border:1px solid var(--border-color);border-radius:16px;padding:1.2rem;display:flex;gap:1rem;align-items:flex-start}
+.student-avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;background:var(--bg-secondary)}
+.student-card h3{margin:0 0 .3rem}.muted{color:var(--text-muted);font-size:.88rem}.bio{margin:.7rem 0;color:var(--text-secondary);font-size:.9rem}
+.empty{padding:2rem;text-align:center;color:var(--text-muted);grid-column:1/-1}
+@media(max-width:800px){.directory-toolbar{grid-template-columns:1fr 1fr}.directory-toolbar input{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<header class="navbar"><div class="nav-container">
+<a href="dashboard.html" class="brand-logo">🎓 MIT SOCIALS</a>
+<div style="display:flex;gap:12px;align-items:center"><a class="btn btn-secondary" href="dashboard.html">Dashboard</a><a class="btn btn-secondary logout-btn" href="#">Sign Out</a></div>
+</div></header>
+<main class="directory-wrap">
+<h1>📖 Student Directory</h1>
+<p class="muted">Find students by name, PRN, branch, year or division.</p>
+<div class="directory-toolbar">
+<input id="search" placeholder="Search name, PRN or branch...">
+<select id="branch"><option value="">All branches</option></select>
+<select id="year"><option value="">All years</option><option>First Year</option><option>Second Year</option><option>Third Year</option><option>Fourth Year</option><option>Faculty</option></select>
+<select id="division"><option value="">All divisions</option><option>A</option><option>B</option><option>C</option><option>D</option></select>
+<button id="clear" class="btn btn-secondary">Clear</button>
+</div>
+<div id="status" class="muted">Loading directory...</div>
+<div id="students" class="directory-grid"></div>
+</main>
+<script src="js/common.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const session = await checkAuthSession(true); if(!session || !session.loggedIn) return;
+  const search=document.getElementById('search'), branch=document.getElementById('branch');
+  const year=document.getElementById('year'), division=document.getElementById('division');
+  const status=document.getElementById('status'), grid=document.getElementById('students');
+  ['Computer Engineering','Information Technology','Electronics & Telecommunication','Mechanical Engineering','Civil Engineering'].forEach(b=>{
+    const o=document.createElement('option');o.value=b;o.textContent=b;branch.appendChild(o);
+  });
+  async function load(){
+    status.textContent='Loading...';
+    const q=new URLSearchParams();
+    if(search.value.trim())q.set('search',search.value.trim());
+    if(branch.value)q.set('branch',branch.value); if(year.value)q.set('year',year.value); if(division.value)q.set('division',division.value);
+    try{
+      const r=await fetch('api/directory?'+q.toString(),{headers:{Accept:'application/json'}});
+      const d=await r.json(); if(!d.success) throw new Error(d.message);
+      grid.innerHTML='';
+      if(!d.students.length){grid.innerHTML='<div class="empty">No students matched your search.</div>';}
+      d.students.forEach(s=>{
+        const card=document.createElement('article');card.className='student-card';
+        const avatar=s.profilePhoto||'https://ui-avatars.com/api/?name='+encodeURIComponent(s.fullName)+'&background=4f8df7&color=fff';
+        card.innerHTML=`<img class="student-avatar" src="${avatar}" alt="">
+          <div><h3>${escapeHtml(s.fullName)}</h3><div class="muted">PRN: ${escapeHtml(s.studentId)}</div>
+          <div class="muted">${escapeHtml(s.branch)} • ${escapeHtml(s.year)} • Div ${escapeHtml(s.division)}</div>
+          ${s.bio?`<div class="bio">${escapeHtml(s.bio)}</div>`:''}
+          <a class="btn btn-primary" style="padding:.45rem .7rem;font-size:.82rem" href="profile.html?userId=${s.id}">View Profile</a></div>`;
+        grid.appendChild(card);
+      });
+      status.textContent=`${d.count} student${d.count===1?'':'s'} found`;
+    }catch(e){status.textContent=e.message||'Could not load directory.';}
+  }
+  let timer; search.addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(load,300)});
+  [branch,year,division].forEach(x=>x.addEventListener('change',load));
+  document.getElementById('clear').onclick=()=>{search.value='';branch.value='';year.value='';division.value='';load()};
+  load();
+  document.querySelectorAll('.logout-btn').forEach(btn=>btn.addEventListener('click',async e=>{
+    e.preventDefault();await fetch('api/logout',{method:'POST'});location.href='login.html';
+  }));
+});
+function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+</script>
+</body>
+</html>

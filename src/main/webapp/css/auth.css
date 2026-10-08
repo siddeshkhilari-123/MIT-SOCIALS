@@ -1,0 +1,68 @@
+/* ====================================================================
+   MIT Socials - Auth Pages Stylesheet (Login & Registration)
+   ==================================================================== */
+
+.auth-wrapper {
+    min-height: calc(100vh - 140px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.08), transparent 40%),
+                radial-gradient(circle at bottom left, rgba(139, 92, 246, 0.08), transparent 40%);
+}
+
+.auth-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 520px;
+    padding: 2.5rem 2rem;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-header h1 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.auth-header p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.password-field-wrapper {
+    position: relative;
+}
+
+.password-toggle-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.auth-footer-links {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.auth-footer-links a {
+    font-weight: 600;
+}
