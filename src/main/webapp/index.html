@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIT Socials | Your Entire College Life in One Digital Identity</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                🎓 MIT SOCIALS
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="login.html" class="nav-link">Sign In</a></li>
+                <li><a href="register.html" class="btn btn-primary">Join Campus Network</a></li>
+                <li>
+                    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+                        🌙 Dark
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="container" style="text-align: center; padding: 4rem 1rem 3rem 1rem;">
+        <span class="badge badge-student" style="font-size: 0.9rem; padding: 0.4rem 1rem; margin-bottom: 1.5rem;">
+            MIT Private Campus Network
+        </span>
+        <h1 style="font-size: 3rem; font-weight: 800; line-height: 1.2; margin-bottom: 1.25rem; max-width: 900px; margin-left: auto; margin-right: auto;">
+            Your Entire College Life, In One Digital Identity.
+        </h1>
+        <p style="font-size: 1.2rem; color: var(--text-secondary); max-width: 700px; margin: 0 auto 2.5rem auto;">
+            Connect with peers, build your student portfolio, track sports & cultural achievements, join vibrant communities, and celebrate campus events.
+        </p>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="register.html" class="btn btn-primary" style="font-size: 1.05rem; padding: 0.85rem 2rem;">
+                Create Student Account
+            </a>
+            <a href="login.html" class="btn btn-secondary" style="font-size: 1.05rem; padding: 0.85rem 2rem;">
+                Sign In to Campus
+            </a>
+        </div>
+    </main>
+
+    <!-- Features Overview -->
+    <section id="features" class="container" style="padding-top: 1rem;">
+        <h2 style="text-align: center; font-size: 2rem; font-weight: 800; margin-bottom: 2.5rem;">
+            Designed Exclusively For MIT Campus Life
+        </h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem;">
+            <div class="card">
+                <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">🎓</div>
+                <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem;">Student Portfolio</h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                    Showcase your branch, year, division, academic achievements, and projects in one verified profile.
+                </p>
+            </div>
+
+            <div class="card">
+                <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">🏆</div>
+                <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem;">Sports & Cultural Record</h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                    Document your victories, tournaments, cultural performances, and club memberships throughout your degree.
+                </p>
+            </div>
+
+            <div class="card">
+                <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">⚡</div>
+                <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem;">Events & Communities</h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                    Never miss a college fest, technical hackathon, workshop, or inter-college championship.
+                </p>
+            </div>
+
+            <div class="card">
+                <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">📖</div>
+                <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem;">Digital Yearbook</h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                    Stay connected with batchmates, seniors, and alumni across all departments and graduating classes.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 MIT Socials. Built with Java Servlets, JDBC, MySQL & Vanilla Web Standard.</p>
+        </div>
+    </footer>
+
+    <!-- Core Scripts -->
+    <script src="js/common.js"></script>
+    <script>
+        // Check if user is already logged in and update nav CTA
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('api/session');
+                const data = await res.json();
+                if (data.loggedIn) {
+                    const registerBtn = document.querySelector('a[href="register.html"]');
+                    if (registerBtn) {
+                        registerBtn.textContent = 'Go to Dashboard →';
+                        registerBtn.href = 'dashboard.html';
+                    }
+                }
+            } catch(e){}
+        });
+    </script>
+</body>
+</html>

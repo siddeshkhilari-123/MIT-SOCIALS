@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Profile | MIT Socials</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="dashboard.html" class="brand-logo">
+                🎓 MIT SOCIALS
+            </a>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+                    🌙 Dark
+                </button>
+                <a href="#" class="btn btn-secondary logout-btn" style="padding: 0.4rem 0.9rem; font-size: 0.85rem;">
+                    Sign Out
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container" style="max-width: 1000px; padding-top: 2rem;">
+        
+        <div id="profile-alert-box" class="alert"></div>
+
+        <!-- Profile Header Card -->
+        <div class="profile-header-card">
+            <!-- Cover Photo -->
+            <div id="profile-cover-bg" class="profile-cover" style="background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1200&q=80');"></div>
+            
+            <!-- Info Bar -->
+            <div class="profile-info-bar">
+                <div class="profile-avatar-wrapper">
+                    <img id="profile-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" 
+                         alt="Student Avatar" class="avatar avatar-xl profile-avatar">
+                    <div class="profile-name-details">
+                        <h2 id="profile-full-name">Student Name</h2>
+                        <div class="profile-meta-line">
+                            <span id="profile-student-id">PRN: MIT2024CS001</span>
+                            <span>•</span>
+                            <span id="profile-email">email@mit.edu</span>
+                            <span id="profile-role-badge" class="badge badge-student">STUDENT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="open-edit-modal" class="btn btn-secondary">
+                    ✏️ Edit Profile
+                </button>
+            </div>
+
+            <!-- Bio Box -->
+            <div class="profile-bio-box">
+                <div style="margin-bottom: 0.5rem; font-weight: 600; color: var(--color-primary);" id="profile-academic">
+                    Computer Engineering • Third Year • Division A
+                </div>
+                <h3>About & Student Bio</h3>
+                <p id="profile-bio">Loading bio...</p>
+            </div>
+        </div>
+
+        <!-- Portfolio Records Section -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+            
+            <div class="card">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem;">🎓 Academic Identity</h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">
+                    Verified enrollment with MIT MySQL database authentication and role access control.
+                </p>
+                <span class="badge badge-student">Verified Student</span>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem;">🏆 Sports & Cultural Portfolio</h3>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1rem;">
+                    Track inter-college tournaments, sports achievements, and cultural performances.
+                </p>
+                <span class="badge badge-club">Stage 2 Ready</span>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modal Form for Editing Profile -->
+    <div id="edit-profile-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Edit Student Profile</h2>
+                <button id="close-modal" class="close-modal-btn">&times;</button>
+            </div>
+
+            <form id="edit-profile-form">
+                <div class="form-group">
+                    <label for="edit-bio" class="form-label">Student Bio</label>
+                    <textarea id="edit-bio" name="bio" class="form-textarea" rows="3" 
+                              placeholder="Tell your batchmates about your interests, achievements, and goals..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-profile-photo" class="form-label">Profile Photo URL</label>
+                    <input type="url" id="edit-profile-photo" name="profile_photo" class="form-input" 
+                           placeholder="https://images.unsplash.com/...">
+                </div>
+
+                <div class="form-group">
+                    <label for="edit-cover-photo" class="form-label">Cover Photo URL</label>
+                    <input type="url" id="edit-cover-photo" name="cover_photo" class="form-input" 
+                           placeholder="https://images.unsplash.com/...">
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.5rem;">
+                    <button type="button" onclick="document.getElementById('edit-profile-modal').style.display='none'" class="btn btn-secondary">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Bar -->
+    <nav class="mobile-bottom-nav">
+        <ul>
+            <li><a href="dashboard.html"><span>🏠</span>Dashboard</a></li>
+            <li><a href="profile.html" class="active"><span>👤</span>Profile</a></li>
+            <li><a href="#" class="logout-btn"><span>🚪</span>Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 MIT Socials. Core Java + Servlets + JDBC + MySQL Platform.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/common.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>

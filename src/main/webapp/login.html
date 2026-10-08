@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | MIT Socials</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                🎓 MIT SOCIALS
+            </a>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+                    🌙 Dark
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Auth Main Section -->
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>Welcome Back 👋</h1>
+                <p>Sign in to access your MIT Socials identity and campus network</p>
+            </div>
+
+            <!-- Dynamic Alert Box -->
+            <div id="alert-box" class="alert"></div>
+
+            <!-- Login Form -->
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="college_email" class="form-label">College Email</label>
+                    <input type="email" id="college_email" name="college_email" class="form-input" 
+                           placeholder="alex.mit@mit.edu" required autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="password-field-wrapper">
+                        <input type="password" id="password" name="password" class="form-input" 
+                               placeholder="••••••••" required autocomplete="current-password">
+                        <button type="button" class="password-toggle-btn">Show</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1.5rem;">
+                    Sign In
+                </button>
+            </form>
+
+            <div class="auth-footer-links">
+                Don't have a campus account? <a href="register.html">Register here</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 MIT Socials. Core Java + Servlets + JDBC + MySQL Platform.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/common.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
