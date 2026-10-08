@@ -20,7 +20,7 @@ if not defined JAVA_HOME (
     exit /b 1
 )
 
-set "CATALINA_HOME=C:\Users\siddesh\Downloads\apache-tomcat-10.1.60-windows-x64"
+set "CATALINA_HOME=C:\Users\siddesh\Downloads\apache-tomcat-10.1.60-windows-x64\apache-tomcat-10.1.60"
 
 echo Java: %JAVA_HOME%
 echo Tomcat: %CATALINA_HOME%
